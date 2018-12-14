@@ -15,7 +15,7 @@ ESP8266WebServer server(80);
 
 const int led = 13;
 
-void handleRoot() {
+void handleRoot() { //gets executed when root directory is opened
   digitalWrite(led, 1);
   server.send(200, "text/plain", "hello from esp8266!");
   digitalWrite(led, 0);
@@ -37,7 +37,7 @@ void handleNotFound() {
   server.send(404, "text/plain", message);
   digitalWrite(led, 0);
 }
-int counter = 0;
+
 void setup(void) {
   pinMode(led, OUTPUT);
   digitalWrite(led, 0);
@@ -56,27 +56,21 @@ void setup(void) {
   Serial.println(ssid);
   Serial.print("IP address: ");
   Serial.println(WiFi.localIP());
-  
+
   server.on("/", handleRoot);
 
-  server.on("/test", []() {
+  server.on("/debug", []() { //shows debug information (not implemented yet)
     counter++;
-    server.sendHeader("text/html", "<title>ESP8266 Temp Reader</title>");
-    server.send(200, "text/html", "<p1><center>test</center></p1>");
-  });
-
-  server.on("/zimmer", []() {
-    counter++;
-    server.send(200, "text/plain", String(counter));
+    //server.sendHeader("text/html", "<title>ESP8266 Temp Reader</title>");
+    //server.send(200, "text/html", "<p1><center>test</center></p1>");
   });
 
   server.onNotFound(handleNotFound);
 
-  server.begin();
+  server.begin(); //starts HTTP Server
   Serial.println("HTTP server started");
 }
 
 void loop(void) {
   server.handleClient();
-  MDNS.update();
 }
