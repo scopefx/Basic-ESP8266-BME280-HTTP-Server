@@ -13,7 +13,7 @@ const char* password = STAPSK;
 
 ESP8266WebServer server(80);
 
-const int led = 13;
+//const int led = 13;
 
 void handleRoot() { //gets executed when root directory is opened
   digitalWrite(led, 1);
